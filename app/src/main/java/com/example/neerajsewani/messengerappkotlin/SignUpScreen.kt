@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import com.google.android.gms.tasks.Task
@@ -19,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import java.net.URL
 import java.util.*
 import kotlin.collections.HashMap
@@ -41,28 +43,39 @@ class SignUpScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+
+        title = "Sign-up Screen"
+
+        //  initializing FIREBASE AUTH
         firebaseAuth = FirebaseAuth.getInstance()
 
+        checkForNewUser()
+
         //  onClick
-        signup_button_signup_activity.setOnClickListener{
+        signup_button_signup_activity.setOnClickListener {
+            progress_bar.show() //  displaying the progress bar
+
             username = username_signup_activity.text.toString()
             email = email_signup_activity.text.toString()
             password = password_signup_activity.text.toString()
 
-            if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && imageURL.isNotBlank()){
-                uploadData(username, email, password, imageURL)
+            if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && imageURL.isNotBlank()) {
+                createUser(email, password) //  creating the user
             }
         }
 
         //  getting the image from the gallery
-        profile_image_signup_activity.setOnClickListener{
+        profile_image_signup_activity.setOnClickListener {
+            progress_bar.show() //  displaying the progress bar
+
             var intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             intent.type = "image/*"
             startActivityForResult(intent, IMAGE_PICK)
         }
 
         //  INTENT "SigninActivity"
-        login_instead_signup_activity.setOnClickListener{
+        login_instead_signup_activity.setOnClickListener {
             var intent = Intent(this, SigninActivity::class.java)
             startActivity(intent)
         }
@@ -72,7 +85,7 @@ class SignUpScreen : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         //  for image capture
-        if (requestCode == IMAGE_PICK && resultCode == Activity.RESULT_OK && data != null){
+        if (requestCode == IMAGE_PICK && resultCode == Activity.RESULT_OK && data != null) {
             //  loading the image
             var imageUri = data.data
 
@@ -89,6 +102,8 @@ class SignUpScreen : AppCompatActivity() {
                     profileImageRef.downloadUrl.addOnSuccessListener {
                         Log.d("SignUpScreen", "onActivityResult (line 77): image URL ==> $it")
 
+                        progress_bar.hide() //  hiding the progress bar
+
                         imageURL = it.toString()
 
                         //  loading the image in the image view
@@ -98,51 +113,52 @@ class SignUpScreen : AppCompatActivity() {
                             .placeholder(R.drawable.abc_ic_arrow_drop_right_black_24dp)
                             .into(profile_image_signup_activity)
                     }
-                        .addOnFailureListener{
+                        .addOnFailureListener {
                             Log.e("SignUpScreen", "onActivityResult (line 85): $it")
                         }
 
                 }
-                .addOnFailureListener{
+                .addOnFailureListener {
                     Log.e("SignUpScreen", "onActivityResult (line 87): $it")
                 }
 
         }
     }
 
+    fun checkForNewUser(){
+        if (firebaseAuth.currentUser != null) {
+            intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+        }
+    }
+
     override fun onStart() {
         super.onStart()
 
-
-        //  creating the user
         if (firebaseAuth.currentUser != null) {
-            if (email.isNotBlank() && password.isNotBlank() && username.isNotBlank()){
-            createUser(email, password)
-            } else {
-                if (toast != null) {
-                    Toast.makeText(this, "Fill out the credentials", Toast.LENGTH_SHORT)
-                    toast.show()
-                }
-            }
+            intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
     }
 
-    private fun createUser(email: String, password: String){
+    private fun createUser(email: String, password: String) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this){task: Task<AuthResult> ->
+            .addOnCompleteListener(this) { task: Task<AuthResult> ->
                 if (!task.isComplete)
-                    return@addOnCompleteListener Toast.makeText(this, "Couldn't create user",
-                        Toast.LENGTH_SHORT).show()
+                    return@addOnCompleteListener Toast.makeText(
+                        this, "Couldn't create user",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
-                //  on successful user creation
-                var intent = Intent(this,  MainActivity::class.java)
-                startActivity(intent)
+                uploadData(username, email, password, imageURL) //  uploading the data of the user
             }
     }
 
 
-    private fun uploadData(username: String, email: String, password: String, imageURL: String){
+    private fun uploadData(username: String, email: String, password: String, imageURL: String) {
         //  getting an instance of the db
         database = FirebaseFirestore.getInstance()
 
@@ -157,11 +173,15 @@ class SignUpScreen : AppCompatActivity() {
             .add(data)
             .addOnSuccessListener {
                 Log.d("SignUpScreen", "uploadData (line 154): Data updation successful")
+
+                progress_bar.hide() //  hiding the progress bar
+
+                intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 Log.e("SignUpScreen", "uploadData (line 157): $it")
             }
-
-
     }
 }
