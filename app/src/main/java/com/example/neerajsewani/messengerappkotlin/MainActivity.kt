@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //  groupie class
-    class UserItem(val user: UserData) : Item<ViewHolder>() {
+    class UserItem(val user: UserData): Item<ViewHolder>() {
         override fun getLayout(): Int {
             return R.layout.recycler_view_inflated_main_activity
         }

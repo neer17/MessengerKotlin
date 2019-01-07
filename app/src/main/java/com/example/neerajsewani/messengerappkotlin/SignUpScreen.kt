@@ -43,8 +43,6 @@ class SignUpScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
         title = "Sign-up Screen"
 
         //  initializing FIREBASE AUTH
@@ -54,7 +52,7 @@ class SignUpScreen : AppCompatActivity() {
 
         //  onClick
         signup_button_signup_activity.setOnClickListener {
-            progress_bar.show() //  displaying the progress bar
+//            progress_bar.show() //  displaying the progress bar
 
             username = username_signup_activity.text.toString()
             email = email_signup_activity.text.toString()
@@ -131,17 +129,6 @@ class SignUpScreen : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        if (firebaseAuth.currentUser != null) {
-            intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
     }
 
     private fun createUser(email: String, password: String) {

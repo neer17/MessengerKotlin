@@ -14,7 +14,10 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="1.0"
-            xmlns:tools="http://schemas.android.com/tools"
             app:layout_constraintVertical_bias="0.0"
-            android:id="@+id/recycler_view_main_activity"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:id="@+id/recycler_view_main_activity"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:listitem="@layout/recycler_view_inflated_main_activity"
+    />
 </androidx.constraintlayout.widget.ConstraintLayout>
