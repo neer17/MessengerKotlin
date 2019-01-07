@@ -1,33 +1,45 @@
 package com.example.neerajsewani.messengerappkotlin
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Contacts.SettingsColumns.KEY
 import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
 import com.example.neerajsewani.messengerappkotlin.data_class.UserData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.activity_main2.*
+import kotlinx.android.synthetic.main.all_users.*
 import kotlinx.android.synthetic.main.recycler_view_inflated_main_activity.view.*
 
-class MainActivity : AppCompatActivity() {
+class AllUsers : AppCompatActivity() {
     lateinit var firebaseFirestore: FirebaseFirestore
+
+    companion object {
+        val KEY = "USER DATA"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main2)
+        setContentView(R.layout.all_users)
 
+        title = "All Users"
         //  adapter by GROUPIE
         var adapter = GroupAdapter<ViewHolder>()
-        adapter.add(UserItem(UserData("username", "email", "imageURL")))
-        recycler_view_main_activity.adapter = adapter
+
+        //
+        adapter.setOnItemClickListener { item, view ->
+            var userItem = item as UserItem
+
+            intent = Intent(view.context, ChatLogActivity::class.java)
+            intent.putExtra(KEY, userItem.user)
+            startActivity(intent)
+        }
 
 
-        /*//  fetching data from the Firebase
+        //  fetching data from the Firebase
         firebaseFirestore = FirebaseFirestore.getInstance()
         firebaseFirestore.collection("users")
             .get()
@@ -38,23 +50,21 @@ class MainActivity : AppCompatActivity() {
                         var email = it.get("email").toString()
                         var imageURL = it.get("imageURL").toString()
 
-                        Log.d("MainActivity", "onCreate (line 36): username ==> $username email ==> $email imageURL ==> $imageURL")
-
                         val user = UserData(username, email, imageURL)
                         adapter.add(UserItem(user))
                     }
 
+                    //  attaching the adapter to the recycler view
                     recycler_view_main_activity.adapter = adapter
-
                 }
 
             }.addOnFailureListener {
-                Log.e("MainActivity", "onCreate (line 30): ", it)
-            }*/
+                Log.e("AllUsers", "onCreate (line 30): ", it)
+            }
     }
 
-    //  groupie class
-    class UserItem(val user: UserData): Item<ViewHolder>() {
+    //  GROUPIE class
+    class UserItem(val user: UserData) : Item<ViewHolder>() {
         override fun getLayout(): Int {
             return R.layout.recycler_view_inflated_main_activity
         }
@@ -66,7 +76,6 @@ class MainActivity : AppCompatActivity() {
             Picasso.get()
                 .load(user.imageURL)
                 .into(viewHolder.itemView.user_image_recycler_inflated_main_activity)
-
         }
     }
 }

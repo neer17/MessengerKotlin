@@ -2,26 +2,18 @@ package com.example.neerajsewani.messengerappkotlin
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-import java.net.URL
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -125,8 +117,7 @@ class SignUpScreen : AppCompatActivity() {
 
     fun checkForNewUser(){
         if (firebaseAuth.currentUser != null) {
-            intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent = Intent(this, ChatActivity::class.java)
             startActivity(intent)
         }
     }
@@ -163,7 +154,7 @@ class SignUpScreen : AppCompatActivity() {
 
                 progress_bar.hide() //  hiding the progress bar
 
-                intent = Intent(this, MainActivity::class.java)
+                intent = Intent(this, ChatActivity::class.java)
                 startActivity(intent)
                 finish()
             }
