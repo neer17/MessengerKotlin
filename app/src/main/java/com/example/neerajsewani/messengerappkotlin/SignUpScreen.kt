@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.neerajsewani.messengerappkotlin.data_class.Users
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -15,7 +16,6 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
-import kotlin.collections.HashMap
 
 class SignUpScreen : AppCompatActivity() {
 
@@ -140,15 +140,11 @@ class SignUpScreen : AppCompatActivity() {
         //  getting an instance of the db
         database = FirebaseFirestore.getInstance()
 
-        var data = HashMap<String, Any>()
-        data["username"] = username
-        data["email"] = email
-        data["password"] = password
-        data["imageURL"] = imageURL
+        val userDetails = Users(firebaseAuth.uid.toString(),username, email, imageURL)
 
         //  adding a new document
         database.collection("users")
-            .add(data)
+            .add(userDetails)
             .addOnSuccessListener {
                 Log.d("SignUpScreen", "uploadData (line 154): Data updation successful")
 
