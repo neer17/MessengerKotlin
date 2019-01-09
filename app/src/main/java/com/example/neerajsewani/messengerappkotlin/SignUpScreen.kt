@@ -16,6 +16,7 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import kotlin.collections.HashMap
 
 class SignUpScreen : AppCompatActivity() {
 
@@ -50,7 +51,8 @@ class SignUpScreen : AppCompatActivity() {
             email = email_signup_activity.text.toString()
             password = password_signup_activity.text.toString()
 
-            if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && imageURL.isNotBlank()) {
+            if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
+                imageURL = "imageURL"
                 createUser(email, password) //  creating the user
             }
         }
@@ -131,16 +133,22 @@ class SignUpScreen : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                uploadData(username, email, password, imageURL) //  uploading the data of the user
+                uploadData(firebaseAuth.uid.toString(), username, email, password, imageURL) //  uploading the data of the user
             }
     }
 
 
-    private fun uploadData(username: String, email: String, password: String, imageURL: String) {
+    private fun uploadData(userId: String, username: String, email: String, password: String, imageURL: String) {
         //  getting an instance of the db
         database = FirebaseFirestore.getInstance()
 
-        val userDetails = Users(firebaseAuth.uid.toString(),username, email, imageURL)
+        var userDetails = HashMap<String, Any>()
+        userDetails["userId"] = userId
+        userDetails["username"] = username
+        userDetails["email"] = email
+        userDetails["password"] = password
+        userDetails["imageURL"] = imageURL
+
 
         //  adding a new document
         database.collection("users")

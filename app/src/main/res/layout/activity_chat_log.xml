@@ -9,28 +9,28 @@
 
     <androidx.recyclerview.widget.RecyclerView
             xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="367dp" android:layout_height="429dp"
+            android:layout_width="371dp" android:layout_height="426dp"
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             android:id="@+id/recycler_view_chat_log_activity"
             tools:listitem="@layout/sender_layout"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintVertical_bias="0.0"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    />
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"/>
     <EditText
-            android:layout_width="303dp"
-            android:layout_height="53dp"
+            android:layout_width="286dp"
+            android:layout_height="54dp"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/enter_message_et_chat_log_activity" android:layout_marginTop="96dp"
-            app:layout_constraintTop_toBottomOf="@+id/recycler_view_chat_log_activity" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view_chat_log_activity"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/send_bt_chat_log_activity" app:layout_constraintHorizontal_bias="0.533"
-            app:layout_constraintVertical_bias="1.0" android:hint="Enter Message"/>
+            app:layout_constraintEnd_toStartOf="@+id/send_bt_chat_log_activity"
+            app:layout_constraintVertical_bias="1.0" android:hint="Enter Message"
+            app:layout_constraintStart_toStartOf="@+id/recycler_view_chat_log_activity"/>
     <Button
             android:text="Send"
             android:layout_width="70dp"
