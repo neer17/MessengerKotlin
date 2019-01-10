@@ -29,7 +29,7 @@ class ChatLogActivity : AppCompatActivity() {
     lateinit var senderImageURL: String
     lateinit var receiverImageURL: String
     lateinit var adapter: GroupAdapter<ViewHolder>
-    lateinit var user:Users
+    lateinit var user: Users
 
     companion object {
         val TAG = "ChatLogActivity"
@@ -41,7 +41,7 @@ class ChatLogActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
-        
+
         senderImageURL = "image"
         receiverImageURL = "image"
 
@@ -63,11 +63,8 @@ class ChatLogActivity : AppCompatActivity() {
         getSendersMessages()
 
         //  enter message edit text
-        enter_message_et_chat_log_activity.addTextChangedListener(object: TextWatcher{
+        enter_message_et_chat_log_activity.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if (s.isNullOrBlank()){
-                    send_bt_chat_log_activity.isClickable = false
-                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -79,29 +76,85 @@ class ChatLogActivity : AppCompatActivity() {
         })
 
         //  send button onClick
-        send_bt_chat_log_activity.setOnClickListener{
+        send_bt_chat_log_activity.setOnClickListener {
             val message = enter_message_et_chat_log_activity.text.toString()
+
+            //  clearing the edit text and dragging the recycler view to the last position
+            enter_message_et_chat_log_activity.text.clear()
+            recycler_view_chat_log_activity.scrollToPosition(adapter.itemCount - 1)
 
             var messageMap = HashMap<String, Any>()
             messageMap["fromId"] = firebaseAuth.uid.toString()
             messageMap["receiverId"] = user.userId
             messageMap["message"] = message
 
+            //  uploading the data to the "messages" collection
             var messagesReference = firebaseFirestore.collection("messages")
+
             messagesReference.add(messageMap).addOnSuccessListener {
-                enter_message_et_chat_log_activity.text.clear()
-                recycler_view_chat_log_activity.scrollToPosition(adapter.itemCount - 1)
-            }.addOnFailureListener{
+
+            }.addOnFailureListener {
                 Log.e("ChatLogActivity", "onCreate (line 103): ", it)
             }
+
+            //  uploading the data to "latest-messages" collection
+            var latestMessages = HashMap<String, Any>()
+            latestMessages["message"] = message
+            latestMessages["to"] = user.userId
+            latestMessages["timestamp"] = FieldValue.serverTimestamp()
+
+            //  if the document exists then updating it else creating a new document
+            //  of both the sender and receiver user
+            firebaseFirestore.collection("latest-messages").document(firebaseAuth.uid.toString())
+                .get()
+                .addOnSuccessListener {
+                    if (it.exists()) {
+                        firebaseFirestore.collection("latest-messages").document(firebaseAuth.uid!!)
+                            .update(latestMessages)
+                            .addOnSuccessListener {
+                                if (it != null)
+                                    Log.d("ChatLogActivity", "onCreate (line 109): latest message $it")
+                            }.addOnFailureListener {
+                                Log.e("ChatLogActivity", "onCreate (line 111): ", it)
+                            }
+
+                        firebaseFirestore.collection("latest-messages").document(user.userId)
+                            .update(latestMessages)
+                            .addOnSuccessListener {
+                                if (it != null)
+                                    Log.d("ChatLogActivity", "onCreate (line 109): latest message $it")
+                            }.addOnFailureListener {
+                                Log.e("ChatLogActivity", "onCreate (line 111): ", it)
+                            }
+                    } else {
+                        firebaseFirestore.collection("latest-messages").document(firebaseAuth.uid!!)
+                            .set(latestMessages)
+                            .addOnSuccessListener {
+                                if (it != null)
+                                    Log.d("ChatLogActivity", "onCreate (line 109): latest message $it")
+                            }.addOnFailureListener {
+                                Log.e("ChatLogActivity", "onCreate (line 111): ", it)
+                            }
+
+                        firebaseFirestore.collection("latest-messages").document(user.userId)
+                            .set(latestMessages)
+                            .addOnSuccessListener {
+                                if (it != null)
+                                    Log.d("ChatLogActivity", "onCreate (line 109): latest message $it")
+                            }.addOnFailureListener {
+                                Log.e("ChatLogActivity", "onCreate (line 111): ", it)
+                            }
+                    }
+                }.addOnFailureListener{
+                    Log.e("ChatLogActivity", "onCreate (line 147): ", it)
+                }
         }
-
-
     }
 
     private fun getSendersMessages() {
         //  fetching data for SENDER
-        var senderQuery = firebaseFirestore.collection("messages").whereEqualTo("receiverId", user.userId).whereEqualTo("fromId", firebaseAuth.uid)
+        var senderQuery = firebaseFirestore.collection("messages").whereEqualTo("receiverId", user.userId)
+            .whereEqualTo("fromId", firebaseAuth.uid)
         senderQuery.addSnapshotListener(EventListener<QuerySnapshot> { snapshot, e ->
             if (e != null) {
                 Log.e(TAG, "Listen failed.", e)
@@ -111,12 +164,9 @@ class ChatLogActivity : AppCompatActivity() {
             var count = snapshot?.count()
             Log.d("ChatLogActivity", "onCreate (line 68): count ==> $count")
             for (dc in snapshot!!.documentChanges) {
-                when(dc.type){
+                when (dc.type) {
                     DocumentChange.Type.ADDED -> {
-                        Log.d("ChatLogActivity", "onCreate (line 71): ${dc.document.data["message"]}")
-                        Log.d("ChatLogActivity", "onCreate (line 110): senders imageURL ==> $senderImageURL")
-
-                        var senderMessage:String = dc.document.data["message"].toString()
+                        var senderMessage: String = dc.document.data["message"].toString()
                         adapter.add(SenderUser(senderMessage, senderImageURL))
                     }
                 }
@@ -127,7 +177,8 @@ class ChatLogActivity : AppCompatActivity() {
 
     private fun getReceiversMessages() {
         //  fetching data for RECEIVER
-        var receiverQuery = firebaseFirestore.collection("messages").whereEqualTo("receiverId", firebaseAuth.uid).whereEqualTo("fromId", user.userId)
+        var receiverQuery = firebaseFirestore.collection("messages").whereEqualTo("receiverId", firebaseAuth.uid)
+            .whereEqualTo("fromId", user.userId)
         receiverQuery.addSnapshotListener(EventListener<QuerySnapshot> { snapshot, e ->
             if (e != null) {
                 Log.e(TAG, "Listen failed.", e)
@@ -135,11 +186,11 @@ class ChatLogActivity : AppCompatActivity() {
             }
 
             for (dc in snapshot!!.documentChanges) {
-                when(dc.type){
+                when (dc.type) {
                     DocumentChange.Type.ADDED -> {
                         Log.d("ChatLogActivity", "onCreate (line 41): ${dc.document.data["message"]}")
 
-                        var receiverMessage:String = dc.document.data["message"].toString()
+                        var receiverMessage: String = dc.document.data["message"].toString()
                         adapter.add(ReceiverUser(receiverMessage, receiverImageURL))
                     }
                 }
@@ -157,7 +208,7 @@ class ChatLogActivity : AppCompatActivity() {
                     senderImageURL = it.data["imageURL"].toString()
                     Log.d("ChatLogActivity", "onCreate (line 58): senders image ==> $senderImageURL")
                 }
-            }.addOnFailureListener{
+            }.addOnFailureListener {
                 Log.e("ChatLogActivity", "onCreate (line 95): ", it)
             }
 
@@ -170,12 +221,12 @@ class ChatLogActivity : AppCompatActivity() {
                     receiverImageURL = it.data["imageURL"].toString()
                     Log.d("ChatLogActivity", "getImageURLs (line 172): receivers image URL ==> $receiverImageURL")
                 }
-            }.addOnFailureListener{
+            }.addOnFailureListener {
                 Log.e("ChatLogActivity", "onCreate (line 95): ", it)
             }
     }
 
-    class SenderUser(val message: String, val imageURL:String) : Item<ViewHolder>() {
+    class SenderUser(val message: String, val imageURL: String) : Item<ViewHolder>() {
         override fun getLayout(): Int {
             return R.layout.sender_layout
         }
@@ -187,7 +238,7 @@ class ChatLogActivity : AppCompatActivity() {
         }
     }
 
-    class ReceiverUser(val message: String, val imageURL:String) : Item<ViewHolder>() {
+    class ReceiverUser(val message: String, val imageURL: String) : Item<ViewHolder>() {
         override fun getLayout(): Int {
             return R.layout.receivers_layout
         }
