@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.neerajsewani.messengerappkotlin.data_class.Users
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.recycler_view_inflated_main_activity.view.
 
 class AllUsers : AppCompatActivity() {
     lateinit var firebaseFirestore: FirebaseFirestore
+    lateinit var firebaseAuth: FirebaseAuth
 
     companion object {
         val KEY = "USER DATA"
@@ -25,6 +27,10 @@ class AllUsers : AppCompatActivity() {
         setContentView(R.layout.all_users)
 
         title = "All Users"
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        val currentUserId = firebaseAuth.uid
+
         //  adapter by GROUPIE
         var adapter = GroupAdapter<ViewHolder>()
 
@@ -46,11 +52,18 @@ class AllUsers : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
                 if (it != null) {
-                    it.forEach {
-                        //  de-serializing the data of collection "Users" to "Users" class
-                        val userData = it.toObject(Users::class.java)
+                    var fromCache:String = if (it.metadata.isFromCache) "Cache" else "Server"
 
-                        adapter.add(UserItem(userData))
+                    Log.d("AllUsers", "onCreate (line 55): $fromCache")
+
+                    it.forEach {
+                        if (it.data["userId"] != currentUserId) {
+                            //  de-serializing the data of collection "Users" to "Users" class
+                            val userData = it.toObject(Users::class.java)
+                            Log.d("AllUsers", "onCreate (line 63): image URL ==> ${userData.imageURL}")
+
+                            adapter.add(UserItem(userData))
+                        }
                     }
 
                     //  attaching the adapter to the recycler view

@@ -87,6 +87,9 @@ class ChatLogActivity : AppCompatActivity() {
             messageMap["fromId"] = firebaseAuth.uid.toString()
             messageMap["receiverId"] = user.userId
             messageMap["message"] = message
+            messageMap["timestamp"] = System.currentTimeMillis()
+            messageMap["imageURL"] = user.imageURL
+            messageMap["username"] = user.username
 
             //  uploading the data to the "messages" collection
             var messagesReference = firebaseFirestore.collection("messages")
@@ -96,58 +99,6 @@ class ChatLogActivity : AppCompatActivity() {
             }.addOnFailureListener {
                 Log.e("ChatLogActivity", "onCreate (line 103): ", it)
             }
-
-            //  uploading the data to "latest-messages" collection
-            var latestMessages = HashMap<String, Any>()
-            latestMessages["message"] = message
-            latestMessages["to"] = user.userId
-            latestMessages["timestamp"] = FieldValue.serverTimestamp()
-
-            //  if the document exists then updating it else creating a new document
-            //  of both the sender and receiver user
-            firebaseFirestore.collection("latest-messages").document(firebaseAuth.uid.toString())
-                .get()
-                .addOnSuccessListener {
-                    if (it.exists()) {
-                        firebaseFirestore.collection("latest-messages").document(firebaseAuth.uid!!)
-                            .update(latestMessages)
-                            .addOnSuccessListener {
-                                if (it != null)
-                                    Log.d("ChatLogActivity", "onCreate (line 109): latest message $it")
-                            }.addOnFailureListener {
-                                Log.e("ChatLogActivity", "onCreate (line 111): ", it)
-                            }
-
-                        firebaseFirestore.collection("latest-messages").document(user.userId)
-                            .update(latestMessages)
-                            .addOnSuccessListener {
-                                if (it != null)
-                                    Log.d("ChatLogActivity", "onCreate (line 109): latest message $it")
-                            }.addOnFailureListener {
-                                Log.e("ChatLogActivity", "onCreate (line 111): ", it)
-                            }
-                    } else {
-                        firebaseFirestore.collection("latest-messages").document(firebaseAuth.uid!!)
-                            .set(latestMessages)
-                            .addOnSuccessListener {
-                                if (it != null)
-                                    Log.d("ChatLogActivity", "onCreate (line 109): latest message $it")
-                            }.addOnFailureListener {
-                                Log.e("ChatLogActivity", "onCreate (line 111): ", it)
-                            }
-
-                        firebaseFirestore.collection("latest-messages").document(user.userId)
-                            .set(latestMessages)
-                            .addOnSuccessListener {
-                                if (it != null)
-                                    Log.d("ChatLogActivity", "onCreate (line 109): latest message $it")
-                            }.addOnFailureListener {
-                                Log.e("ChatLogActivity", "onCreate (line 111): ", it)
-                            }
-                    }
-                }.addOnFailureListener{
-                    Log.e("ChatLogActivity", "onCreate (line 147): ", it)
-                }
         }
     }
 

@@ -51,8 +51,7 @@ class SignUpScreen : AppCompatActivity() {
             email = email_signup_activity.text.toString()
             password = password_signup_activity.text.toString()
 
-            if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
-                imageURL = "imageURL"
+            if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && imageURL.isNotBlank()) {
                 createUser(email, password) //  creating the user
             }
         }
