@@ -5,10 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.firestore.*
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
@@ -21,6 +20,8 @@ class ChatActivity : AppCompatActivity() {
 
     lateinit var firebaseAuth: FirebaseAuth
     lateinit var firestore: FirebaseFirestore
+    lateinit var currentUserId: String
+    lateinit var latestMessagesreference: DatabaseReference
     lateinit var adapter: GroupAdapter<ViewHolder>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +30,8 @@ class ChatActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
+        currentUserId = firebaseAuth.uid!!
+        latestMessagesreference = FirebaseDatabase.getInstance().getReference("latest-messages")
 
         var currentUser = firebaseAuth.uid
 
@@ -36,29 +39,29 @@ class ChatActivity : AppCompatActivity() {
         adapter = GroupAdapter()
         recycler_view_chat_activity.adapter = adapter
 
-        //  getting all the users to whom have I sent messages
-        var query = firestore.collection("messages")
-            .whereEqualTo("fromId", currentUser)
-            .orderBy("timestamp", Query.Direction.DESCENDING)
+        //  getting the latest message from all the recipients
+        getRecipientLastMessages()
+    }
 
-        query.addSnapshotListener { snapshots, e ->
-            if (e != null){
-                Log.e("ChatActivity", "onCreate (line 32): ", e)
+    private fun getRecipientLastMessages() {
+        firestore.collection("latest_messages").document(currentUserId).collection(currentUserId).addSnapshotListener{
+            querySnapshot, firebaseFirestoreException ->
+
+            if (firebaseFirestoreException != null) {
+                Log.e("ChatActivity", "getRecipientLastMessages (line 51): ", firebaseFirestoreException)
                 return@addSnapshotListener
             }
 
-            for (data in snapshots!!.documentChanges){
-                when(data.type){
-                    DocumentChange.Type.ADDED -> {
-                        val username = data.document.data["username"].toString()
-                        val imageURL = data.document.data["imageURL"].toString()
-                        val latestMessage = data.document.data["message"].toString()
+            if (!querySnapshot!!.isEmpty) {
+                //  clearing out the previous entry of data
+                adapter.clear()
 
-                        Log.d("ChatActivity", "onCreate (line 55):" +
-                                " username ==> $username imageURL ==> $imageURL latetstMessage ==> $latestMessage")
+                querySnapshot.forEach {
+                    val username = it.data["username"].toString()
+                    val latest_message = it.data["latest_message"].toString()
+                    val usersImageURL = it.data["userImageURL"].toString()
 
-                        adapter.add(LatestMessages(username, latestMessage, imageURL))
-                    }
+                    adapter.add(LatestMessages(username, latest_message, usersImageURL))
                 }
             }
         }
