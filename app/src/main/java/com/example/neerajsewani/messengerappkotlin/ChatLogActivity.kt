@@ -191,7 +191,10 @@ class ChatLogActivity : AppCompatActivity() {
             }
 
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
-                Log.d("ChatLogActivity", "onChildAdded (line 194): data ==> ${p0.getValue(Messages::class.java).toString()}")
+                Log.d("ChatLogActivity", "onChildAdded (line 194): $p0")
+
+                val fromId = p0.child("fromId").value
+                Log.d("ChatLogActivity", "onChildAdded (line 197): fromId ==> $fromId")
                 
 
                 /*if (data.fromId == currentUserId) {
@@ -255,9 +258,7 @@ class ChatLogActivity : AppCompatActivity() {
             viewHolder.itemView.timestamp_receivers_layout.text = timestamp
         }
     }
-
-    data class Messages(val fromId: String, val receiverId: String, val message: String, val timestamp: String){
-        constructor(): this("", "", "", "")
-    }
 }
+
+
 
