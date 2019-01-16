@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_chat_log.*
 import com.example.neerajsewani.messengerappkotlin.data_class.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.receivers_layout.view.*
 import kotlinx.android.synthetic.main.sender_layout.view.*
@@ -55,7 +56,7 @@ class ChatLogActivity : AppCompatActivity() {
         recycler_view_chat_log_activity.adapter = adapter
 
         //  getting the Intent from "AllUsers"
-        user = intent.getParcelableExtra<Users>(AllUsers.KEY)
+        user = intent.getParcelableExtra(AllUsers.KEY)
 
         //  getting sender's and receiver's imageURL
         getImageURLs()
@@ -96,12 +97,13 @@ class ChatLogActivity : AppCompatActivity() {
             messageMap["username"] = user.username
 
             //  for the sender
-            messagesReference.child(currentUserId).child(user.userId).setValue(messageMap).addOnFailureListener {
+            val messagePushedRef = messagesReference.child(currentUserId).child(user.userId).push()
+            messagePushedRef.setValue(messageMap).addOnFailureListener {
                 Log.e("ChatLogActivity", "onCreate (line 104): ", it)
             }
 
             //  for the receiver
-            messagesReference.child(user.userId).child(currentUserId).setValue(messageMap).addOnFailureListener {
+            messagesReference.child(user.userId).child(currentUserId).push().setValue(messageMap).addOnFailureListener {
                 Log.e("ChatLogActivity", "onCreate (line 109): ", it)
             }
 
@@ -179,8 +181,8 @@ class ChatLogActivity : AppCompatActivity() {
             }
     }
 
-    private fun getAllMessages(){
-        messagesReference.child(currentUserId).child(user.userId).addChildEventListener(object: ChildEventListener{
+    private fun getAllMessages() {
+        messagesReference.child(currentUserId).child(user.userId).addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
 
@@ -191,17 +193,12 @@ class ChatLogActivity : AppCompatActivity() {
             }
 
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
-                Log.d("ChatLogActivity", "onChildAdded (line 194): $p0")
-
-                val fromId = p0.child("fromId").value
-                Log.d("ChatLogActivity", "onChildAdded (line 197): fromId ==> $fromId")
-                
-
-                /*if (data.fromId == currentUserId) {
-                    adapter.add(SenderUser(data.message, data.timestamp))
+                val messages = p0.getValue(Messages::class.java)
+                if (messages!!.fromId == currentUserId) {
+                    adapter.add(SenderUser(messages.message, messages.timestamp))
                 } else {
-                    adapter.add(ReceiverUser(data.message, data.timestamp))
-                }*/
+                    adapter.add(ReceiverUser(messages.message, messages.timestamp))
+                }
             }
 
             override fun onChildRemoved(p0: DataSnapshot) {
@@ -237,25 +234,25 @@ class ChatLogActivity : AppCompatActivity() {
             }
     }
 
-    class SenderUser(val message: String, val timestamp: String) : Item<ViewHolder>() {
+    class SenderUser(private val message: String = "", private val timestamp: Long = 0) : Item<ViewHolder>() {
         override fun getLayout(): Int {
             return R.layout.sender_layout
         }
 
         override fun bind(viewHolder: ViewHolder, position: Int) {
             viewHolder.itemView.last_message_sender_layout.text = message
-            viewHolder.itemView.timestamp_sender_layout.text = timestamp
+            viewHolder.itemView.timestamp_sender_layout.text = timestamp.toString()
         }
     }
 
-    class ReceiverUser(val message: String, val timestamp: String) : Item<ViewHolder>() {
+    class ReceiverUser(private val message: String = "", private val timestamp: Long = 0) : Item<ViewHolder>() {
         override fun getLayout(): Int {
             return R.layout.receivers_layout
         }
 
         override fun bind(viewHolder: ViewHolder, position: Int) {
             viewHolder.itemView.latest_message_receivers_layout.text = message
-            viewHolder.itemView.timestamp_receivers_layout.text = timestamp
+            viewHolder.itemView.timestamp_receivers_layout.text = timestamp.toString()
         }
     }
 }
