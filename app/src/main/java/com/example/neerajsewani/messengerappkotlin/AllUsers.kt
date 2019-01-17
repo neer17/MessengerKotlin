@@ -19,7 +19,7 @@ class AllUsers : AppCompatActivity() {
     lateinit var firebaseAuth: FirebaseAuth
 
     companion object {
-        val KEY = "USER DATA"
+        const val KEY = "USER DATA"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +60,6 @@ class AllUsers : AppCompatActivity() {
                         if (it.data["userId"] != currentUserId) {
                             //  de-serializing the data of collection "Users" to "Users" class
                             val userData = it.toObject(Users::class.java)
-                            Log.d("AllUsers", "onCreate (line 63): image URL ==> ${userData.imageURL}")
 
                             adapter.add(UserItem(userData))
                         }

@@ -55,8 +55,15 @@ class ChatLogActivity : AppCompatActivity() {
         adapter = GroupAdapter()
         recycler_view_chat_log_activity.adapter = adapter
 
-        //  getting the Intent from "AllUsers"
-        user = intent.getParcelableExtra(AllUsers.KEY)
+        //  getting the Intent from "AllUsers" or "ChatActivity"
+        if (intent != null){
+            user = if (intent.getStringExtra("uniqueId") == "ChatActivity"){
+                intent.getParcelableExtra(AllUsers.KEY)
+            } else {
+                intent.getParcelableExtra(AllUsers.KEY)
+            }
+        }
+
 
         //  getting sender's and receiver's imageURL
         getImageURLs()

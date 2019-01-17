@@ -9,15 +9,18 @@ import kotlinx.android.parcel.Parcelize
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.example.neerajsewani.messengerappkotlin.data_class.Users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.auth.User
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.OnItemClickListener
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.activity_chat_log.*
 import kotlinx.android.synthetic.main.chat_layout_inflated.view.*
 
 class ChatActivity : AppCompatActivity() {
@@ -48,16 +51,20 @@ class ChatActivity : AppCompatActivity() {
 
         //  onClick adapter
         adapter.setOnItemClickListener{item, view ->
-            val latestMessages = item as LatestMessages
+            val messages = item as LatestMessages
+
+            val user = Users(messages.userId, messages.username, "", messages.imageURL)
 
             intent = Intent(this, ChatLogActivity::class.java)
-            val bundle = Bundle()
+            intent.putExtra(AllUsers.KEY, user)
+            intent.putExtra("uniqueId", "ChatActivity")
             startActivity(intent)
         }
     }
 
     //  displaying recipient's last message with username and image
     private fun getRecipientLastMessages() {
+        //  getting the latest messages and adding that to the adapter
         firestore.collection("latest_messages").document(currentUserId).collection(currentUserId).addSnapshotListener{
             querySnapshot, firebaseFirestoreException ->
 
@@ -74,10 +81,9 @@ class ChatActivity : AppCompatActivity() {
                     val username = it.data["username"].toString()
                     val latestMessage = it.data["latest_message"].toString()
                     val usersImageURL = it.data["userImageURL"].toString()
-                    val usersId:String = it.data["usersId"].toString()
-
-                    adapter.add(LatestMessages(usersId, username, latestMessage, usersImageURL))
-
+                    val userId = it.data["usersId"].toString()
+                    //  adding it to the adapter
+                    adapter.add(LatestMessages(userId, username, latestMessage, usersImageURL))
                 }
             }
         }
