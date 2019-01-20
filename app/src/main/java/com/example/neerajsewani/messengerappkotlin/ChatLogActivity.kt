@@ -41,7 +41,7 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        firebaseAuth = FirebaseAuth.getInstance()
+        /*firebaseAuth = FirebaseAuth.getInstance()
         currentUserId = firebaseAuth.uid!!
         firebaseFirestore = FirebaseFirestore.getInstance()
         messagesReference = FirebaseDatabase.getInstance().getReference("messages")
@@ -116,7 +116,7 @@ class ChatLogActivity : AppCompatActivity() {
 
             //  adding or updating data in the "latest-messages" collection
             addOrUpdateLatestMessagesCollection()
-        }
+        }*/
     }
 
     private fun getCurrentUsersDetails() {

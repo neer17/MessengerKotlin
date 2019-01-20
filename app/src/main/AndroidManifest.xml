@@ -21,7 +21,8 @@
         </activity>
         <activity
                 android:name=".SigninActivity"
-                android:launchMode="singleTop">
+                android:launchMode="singleTop"
+        >
         </activity>
         <activity
                 android:name=".AllUsers"
@@ -29,9 +30,14 @@
         </activity>
         <activity
                 android:name=".ChatActivity"
-                android:launchMode="singleTop">
+                android:launchMode="singleTop"
+                android:theme="@style/AppTheme"
+        >
         </activity>
-        <activity android:name=".ChatLogActivity">
+        <activity android:name=".ChatLogActivity"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+                  android:windowSoftInputMode="adjustResize"
+        >
         </activity>
     </application>
 
