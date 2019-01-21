@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.firestore.*
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.receivers_layout.view.*
 import kotlinx.android.synthetic.main.sender_layout.view.*
 import java.lang.Exception
@@ -32,16 +33,13 @@ class ChatLogActivity : AppCompatActivity() {
     lateinit var message: String
     lateinit var currentUserImageURL: String
     lateinit var currentUsersUsername: String
-
-    companion object {
-        val TAG = "ChatLogActivity"
-    }
+    lateinit var receiverUsername: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        /*firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAuth = FirebaseAuth.getInstance()
         currentUserId = firebaseAuth.uid!!
         firebaseFirestore = FirebaseFirestore.getInstance()
         messagesReference = FirebaseDatabase.getInstance().getReference("messages")
@@ -50,6 +48,7 @@ class ChatLogActivity : AppCompatActivity() {
 
         senderImageURL = "image"
         receiverImageURL = "image"
+        receiverUsername = "receivers_username"
 
         //  setting the adapter
         adapter = GroupAdapter()
@@ -116,7 +115,7 @@ class ChatLogActivity : AppCompatActivity() {
 
             //  adding or updating data in the "latest-messages" collection
             addOrUpdateLatestMessagesCollection()
-        }*/
+        }
     }
 
     private fun getCurrentUsersDetails() {
@@ -221,7 +220,6 @@ class ChatLogActivity : AppCompatActivity() {
 
                 it.forEach { it ->
                     senderImageURL = it.data["imageURL"].toString()
-                    Log.d("ChatLogActivity", "onCreate (line 58): senders image ==> $senderImageURL")
                 }
             }.addOnFailureListener {
                 Log.e("ChatLogActivity", "onCreate (line 95): ", it)
@@ -234,8 +232,15 @@ class ChatLogActivity : AppCompatActivity() {
 
                 it.forEach { it ->
                     receiverImageURL = it.data["imageURL"].toString()
-                    Log.d("ChatLogActivity", "getImageURLs (line 172): receivers image URL ==> $receiverImageURL")
+                    receiverUsername = it.data["username"].toString()
                 }
+
+                Log.d("ChatLogActivity", "getImageURLs (line 238):" +
+                        " receiver image URL ==> $receiverImageURL \t receiver username ==> $receiverUsername")
+
+                //  setting the receiver's image and username to the toolbar
+                Picasso.get().load(receiverImageURL).into(circle_image_view_chat_log_activity)
+                username_tv_chat_log_activity.text = receiverUsername
             }.addOnFailureListener {
                 Log.e("ChatLogActivity", "onCreate (line 95): ", it)
             }

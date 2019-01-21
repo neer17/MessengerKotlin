@@ -8,16 +8,16 @@
         tools:context=".AllUsers">
 
     <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="366dp"
-            android:layout_height="544dp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintVertical_bias="0.0"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="392dp" android:layout_height="571dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_bias="1.0"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:id="@+id/recycler_view_main_activity"
-            xmlns:tools="http://schemas.android.com/tools"
             tools:listitem="@layout/recycler_view_inflated_main_activity"
     />
 </androidx.constraintlayout.widget.ConstraintLayout>
