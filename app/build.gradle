@@ -12,7 +12,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.neerajsewani.messengerappkotlin"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -51,6 +51,9 @@ dependencies {
     //  groupie
     implementation 'com.xwray:groupie:2.3.0'
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.3.0'
+
+    //  image compressor
+    implementation 'id.zelory:compressor:2.1.0'
 
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }
