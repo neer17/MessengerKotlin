@@ -1,32 +1,24 @@
 package com.example.neerajsewani.messengerappkotlin
 
-import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.signup_screen.*
-import java.util.*
-import kotlin.collections.HashMap
 
 class SignUpScreen : AppCompatActivity() {
 
-    lateinit var firebaseAuth: FirebaseAuth
-    lateinit var database: FirebaseFirestore
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var database: FirebaseFirestore
 
-    lateinit var email: String
-    lateinit var password: String
-    lateinit var username: String
-    lateinit var imageURL: String
-    lateinit var toast: Toast
+    private lateinit var email: String
+    private lateinit var password: String
+    private lateinit var username: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

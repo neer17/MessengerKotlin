@@ -200,6 +200,7 @@ class ChatLogActivity : AppCompatActivity() {
 
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val messages = p0.getValue(Messages::class.java)
+                Log.d("ChatLogActivity", "onChildAdded (line 203): messages ==> $messages")
                 if (messages!!.fromId == currentUserId) {
                     adapter.add(SenderUser(messages.message, messages.timestamp))
                 } else {

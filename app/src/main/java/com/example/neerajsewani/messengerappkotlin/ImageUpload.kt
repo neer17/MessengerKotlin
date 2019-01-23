@@ -2,24 +2,16 @@ package com.example.neerajsewani.messengerappkotlin
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
-import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.image_upload.*
-import okhttp3.internal.io.FileSystem
-import java.io.File
-import java.net.URI
 import java.util.*
-import android.provider.MediaStore.Images
-import android.graphics.Bitmap
-import java.io.ByteArrayOutputStream
 
 
 class ImageUpload : AppCompatActivity() {

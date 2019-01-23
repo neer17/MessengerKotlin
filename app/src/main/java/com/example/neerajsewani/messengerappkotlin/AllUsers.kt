@@ -32,12 +32,12 @@ class AllUsers : AppCompatActivity() {
         val currentUserId = firebaseAuth.uid
 
         //  adapter by GROUPIE
-        var adapter = GroupAdapter<ViewHolder>()
+        val adapter = GroupAdapter<ViewHolder>()
 
         //  onClick
         //  when a user's profile is clicked, would get redirected to the "ChatLogActivity"
         adapter.setOnItemClickListener { item, view ->
-            var userItem = item as UserItem
+            val userItem = item as UserItem
 
             intent = Intent(view.context, ChatLogActivity::class.java)
             intent.putExtra(KEY, userItem.user) //  enable the parcelable extension to send the whole class through the intent
@@ -52,7 +52,7 @@ class AllUsers : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
                 if (it != null) {
-                    var fromCache:String = if (it.metadata.isFromCache) "Cache" else "Server"
+                    val fromCache:String = if (it.metadata.isFromCache) "Cache" else "Server"
 
                     Log.d("AllUsers", "onCreate (line 55): $fromCache")
 
@@ -86,6 +86,7 @@ class AllUsers : AppCompatActivity() {
 
             Picasso.get()
                 .load(user.imageURL)
+                .error(R.drawable.ic_person_black_24dp)
                 .into(viewHolder.itemView.user_image_recycler_inflated_main_activity)
         }
     }
