@@ -1,10 +1,10 @@
-package com.example.neerajsewani.messengerappkotlin
+package com.two.pilots.messengerappkotlin
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.example.neerajsewani.messengerappkotlin.data_class.Users
+import com.two.pilots.messengerappkotlin.data_class.Users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso

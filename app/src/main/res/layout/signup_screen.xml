@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SignUpScreen"
-        android:background="@drawable/login"
+        android:background="@drawable/background2_a"
 >
 
     <EditText
@@ -31,7 +31,7 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#90CAF9"
+            android:background="#fff"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginBottom="24dp" app:layout_constraintBottom_toTopOf="@+id/email_signup_activity"
     />
@@ -57,8 +57,8 @@
     />
     <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#90CAF9"
+            android:layout_height="3dp"
+            android:background="#fff"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/password_signup_activity"
@@ -85,8 +85,8 @@
     />
     <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#90CAF9"
+            android:layout_height="3dp"
+            android:background="#fff"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_signup_activity"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/signup_button_signup_activity"
@@ -109,7 +109,7 @@
     />
     <TextView
             android:text="Login in Instead?"
-            android:textColor="#0D47A1"
+            android:textColor="#fff"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:layout_width="190dp"
             android:layout_height="39dp"
@@ -122,12 +122,4 @@
             app:layout_constraintVertical_bias="0.138"
             android:gravity="center_horizontal|center_vertical"
     />
-    <ImageView
-            android:layout_width="200dp"
-            android:layout_height="152dp" app:srcCompat="@drawable/union1"
-            android:id="@+id/imageView3" android:layout_marginTop="52dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/username_signup_activity"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

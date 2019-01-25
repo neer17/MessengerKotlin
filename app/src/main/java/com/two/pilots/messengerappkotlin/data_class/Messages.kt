@@ -1,4 +1,4 @@
-package com.example.neerajsewani.messengerappkotlin.data_class
+package com.two.pilots.messengerappkotlin.data_class
 
 import com.google.firebase.database.IgnoreExtraProperties
 

@@ -1,4 +1,4 @@
-package com.example.neerajsewani.messengerappkotlin
+package com.two.pilots.messengerappkotlin
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

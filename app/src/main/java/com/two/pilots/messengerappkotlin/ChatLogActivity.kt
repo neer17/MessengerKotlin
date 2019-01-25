@@ -1,4 +1,4 @@
-package com.example.neerajsewani.messengerappkotlin
+package com.two.pilots.messengerappkotlin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,15 +9,13 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat_log.*
-import com.example.neerajsewani.messengerappkotlin.data_class.*
+import com.two.pilots.messengerappkotlin.data_class.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.firestore.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.receivers_layout.view.*
 import kotlinx.android.synthetic.main.sender_layout.view.*
-import java.lang.Exception
 
 class ChatLogActivity : AppCompatActivity() {
 

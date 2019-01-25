@@ -11,7 +11,7 @@ androidExtensions {
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.neerajsewani.messengerappkotlin"
+        applicationId "com.two.pilots.messengerappkotlin"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1

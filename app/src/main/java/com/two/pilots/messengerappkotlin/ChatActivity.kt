@@ -1,26 +1,20 @@
-package com.example.neerajsewani.messengerappkotlin
+package com.two.pilots.messengerappkotlin
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import com.example.neerajsewani.messengerappkotlin.data_class.Users
+import com.two.pilots.messengerappkotlin.data_class.Users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.*
-import com.google.firebase.firestore.auth.User
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
-import com.xwray.groupie.OnItemClickListener
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.activity_chat_log.*
 import kotlinx.android.synthetic.main.chat_layout_inflated.view.*
 
 class ChatActivity : AppCompatActivity() {
