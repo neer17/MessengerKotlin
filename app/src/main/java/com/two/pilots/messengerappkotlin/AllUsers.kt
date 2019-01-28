@@ -81,13 +81,22 @@ class AllUsers : AppCompatActivity() {
         }
 
         override fun bind(viewHolder: ViewHolder, position: Int) {
+            Log.d("UserItem", "bind (line 84): user ==> ${user}")
+
             viewHolder.itemView.username_recycler_inflated_main_activity.text = user.username
             viewHolder.itemView.email_recycler_inflated_main_activity.text = user.email
 
-            Picasso.get()
-                .load(user.imageURL)
-                .error(R.drawable.ic_person_black_24dp)
-                .into(viewHolder.itemView.user_image_recycler_inflated_main_activity)
+            if (user.imageURL.isNotEmpty()) {
+                Picasso.get()
+                    .load(user.imageURL)
+                    .error(R.drawable.ic_person_black_24dp)
+                    .into(viewHolder.itemView.user_image_recycler_inflated_main_activity)
+            } else {
+                Picasso.get()
+                    .load(R.drawable.ic_person_black_24dp)
+                    .error(R.drawable.ic_person_black_24dp)
+                    .into(viewHolder.itemView.user_image_recycler_inflated_main_activity)
+            }
         }
     }
 }

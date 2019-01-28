@@ -10,6 +10,13 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.signup_screen.*
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.view.Display
+import android.util.DisplayMetrics
+import android.view.View
+import android.view.ViewTreeObserver
+
 
 class SignUpScreen : AppCompatActivity() {
 
@@ -23,6 +30,10 @@ class SignUpScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.signup_screen)
+
+        val metrics = DisplayMetrics()
+        Log.d("SignUpScreen", "onCreate (line 35): width ==> ${metrics.widthPixels} height ==> ${metrics.heightPixels}")
+        windowManager.defaultDisplay.getMetrics(metrics)
 
         title = "Sign-up Screen"
 
@@ -96,5 +107,16 @@ class SignUpScreen : AppCompatActivity() {
             .addOnFailureListener {
                 Log.e("SignUpScreen", "uploadData (line 157): $it")
             }
+    }
+
+    fun <T : View> T.height(function: (Int) -> Unit) {
+        if (height == 0)
+            viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    function(height)
+                }
+            })
+        else function(height)
     }
 }
