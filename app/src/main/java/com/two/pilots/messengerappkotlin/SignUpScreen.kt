@@ -16,6 +16,8 @@ import android.view.Display
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.ProgressBar
+import com.google.firestore.admin.v1beta1.Progress
 
 
 class SignUpScreen : AppCompatActivity() {
@@ -31,9 +33,11 @@ class SignUpScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.signup_screen)
 
-        val metrics = DisplayMetrics()
+
+        //  getting details of the display
+        /*val metrics = DisplayMetrics()
         Log.d("SignUpScreen", "onCreate (line 35): width ==> ${metrics.widthPixels} height ==> ${metrics.heightPixels}")
-        windowManager.defaultDisplay.getMetrics(metrics)
+        windowManager.defaultDisplay.getMetrics(metrics)*/
 
         title = "Sign-up Screen"
 
@@ -50,6 +54,9 @@ class SignUpScreen : AppCompatActivity() {
             password = password_signup_activity.text.toString()
 
             if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
+                //  making progress bar visible
+                progress_bar_signup_screen.visibility = ProgressBar.VISIBLE
+
                 createUser(email, password) //  creating the user
             }
         }
@@ -73,6 +80,9 @@ class SignUpScreen : AppCompatActivity() {
     private fun createUser(email: String, password: String) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task: Task<AuthResult> ->
+                //  making progress bar invisible
+                progress_bar_signup_screen.visibility = ProgressBar.GONE
+
                 if (!task.isComplete)
                     return@addOnCompleteListener Toast.makeText(
                         this, "Couldn't create user",
@@ -80,6 +90,11 @@ class SignUpScreen : AppCompatActivity() {
                     ).show()
 
                 uploadData(firebaseAuth.uid.toString(), username, email, password) //  uploading the data of the user
+            }.addOnFailureListener {
+                //  making progress bar invisible
+                progress_bar_signup_screen.visibility = ProgressBar.GONE
+
+                Log.e("SignUpScreen", "createUser (line 90): ", it)
             }
     }
 
@@ -109,7 +124,7 @@ class SignUpScreen : AppCompatActivity() {
             }
     }
 
-    fun <T : View> T.height(function: (Int) -> Unit) {
+    /*fun <T : View> T.height(function: (Int) -> Unit) {
         if (height == 0)
             viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
@@ -118,5 +133,5 @@ class SignUpScreen : AppCompatActivity() {
                 }
             })
         else function(height)
-    }
+    }*/
 }

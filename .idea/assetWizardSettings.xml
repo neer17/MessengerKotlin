@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_person_pin_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_person_outline_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,9 +28,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="ffffff" />
+                            <entry key="color" value="ffcdd2" />
                             <entry key="height" value="320" />
-                            <entry key="outputName" value="person_pin_white_320_by_320" />
+                            <entry key="outputName" value="person_pink_320_by_320" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\NEERAJ SEWANI" />
                             <entry key="width" value="320" />

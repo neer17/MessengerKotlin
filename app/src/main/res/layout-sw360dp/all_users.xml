@@ -9,7 +9,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
             xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="392dp" android:layout_height="586dp"
+            android:layout_width="346dp" android:layout_height="496dp"
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"

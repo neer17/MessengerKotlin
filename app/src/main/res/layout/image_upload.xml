@@ -3,12 +3,12 @@
                                                    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
-                                                   android:background="@drawable/login"
+                                                   android:background="@drawable/background2_b"
 >
 
     <de.hdodenhof.circleimageview.CircleImageView android:layout_width="234dp"
                                                   android:layout_height="225dp"
-                                                  android:src="@drawable/ic_person_black_24dp"
+                                                  android:src="@drawable/person_pink_320_by_320"
                                                   android:id="@+id/circle_image_view_image_upload"
                                                   android:layout_marginTop="8dp"
                                                   app:layout_constraintTop_toTopOf="parent"
@@ -19,8 +19,8 @@
                                                   app:layout_constraintStart_toStartOf="parent"
                                                   android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
                                                   app:layout_constraintBottom_toBottomOf="parent"
-                                                  app:layout_constraintHorizontal_bias="0.496"
-                                                  app:layout_constraintVertical_bias="0.256"/>
+                                                  app:layout_constraintHorizontal_bias="0.51"
+    />
 
     <ImageView android:layout_width="60dp"
                android:layout_height="60dp"
@@ -37,5 +37,14 @@
                app:layout_constraintTop_toTopOf="@+id/camera_image_view_image_upload" app:layout_constraintStart_toStartOf="@+id/camera_image_view_image_upload"
                app:layout_constraintBottom_toBottomOf="@+id/camera_image_view_image_upload"
                app:layout_constraintEnd_toEndOf="@+id/camera_image_view_image_upload"/>
+    <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

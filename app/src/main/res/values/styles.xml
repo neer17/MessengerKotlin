@@ -16,4 +16,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>-->
 
+    <style name="ProgressBarTheme" parent="Widget.AppCompat.ProgressBar">
+        <item name="colorAccent">#E91E63</item>
+    </style>
+
 </resources>
