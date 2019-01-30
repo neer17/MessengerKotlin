@@ -1,10 +1,11 @@
-package com.two.pilots.messengerappkotlin
+package com.two.pilots.KChat
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -12,19 +13,24 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.image_upload.*
 import java.util.*
+import kotlin.concurrent.schedule
 
 
 class ImageUpload : AppCompatActivity() {
     private val IMAGE_PICK: Int = 100
 
-    lateinit var profileImageRef: StorageReference
-    lateinit var usersReference: FirebaseFirestore
-    lateinit var userId: String
+    private lateinit var profileImageRef: StorageReference
+    private lateinit var usersReference: FirebaseFirestore
+    private lateinit var userId: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.image_upload)
+
+        //  progress bar GONE
+        progressBar.visibility = ProgressBar.GONE
+
         title = "Upload Image"
 
         usersReference = FirebaseFirestore.getInstance()
@@ -44,6 +50,9 @@ class ImageUpload : AppCompatActivity() {
 
         //  for image capture
         if (requestCode == IMAGE_PICK && resultCode == Activity.RESULT_OK && data != null) {
+            //  progress bar VISIBLE
+            progressBar.visibility = ProgressBar.VISIBLE
+
             //  loading the image
             val imageUri = data.data
 
@@ -81,9 +90,15 @@ class ImageUpload : AppCompatActivity() {
                                             .update("imageURL", imageURL)
                                             .addOnSuccessListener {
                                                 intent = Intent(this, ChatActivity::class.java)
-                                                intent.flags =
+                                                val timer = Timer("schedule", true)
+                                                timer.schedule(3000) {
+                                                    //  progress bar VISIBLE
+                                                    progressBar.visibility = ProgressBar.VISIBLE
+                                                    intent.flags =
                                                         Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                                startActivity(intent)
+                                                    startActivity(intent)
+                                                }
+
                                             }.addOnFailureListener {
                                                 Log.e("ImageUpload", "onActivityResult (line 74): ", it)
                                             }

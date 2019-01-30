@@ -1,8 +1,9 @@
-package com.two.pilots.messengerappkotlin
+package com.two.pilots.KChat
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
@@ -10,14 +11,6 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.signup_screen.*
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
-import android.view.Display
-import android.util.DisplayMetrics
-import android.view.View
-import android.view.ViewTreeObserver
-import android.widget.ProgressBar
-import com.google.firestore.admin.v1beta1.Progress
 
 
 class SignUpScreen : AppCompatActivity() {
@@ -29,15 +22,14 @@ class SignUpScreen : AppCompatActivity() {
     private lateinit var password: String
     private lateinit var username: String
 
+    private var toast: Toast? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.signup_screen)
 
-
-        //  getting details of the display
-        /*val metrics = DisplayMetrics()
-        Log.d("SignUpScreen", "onCreate (line 35): width ==> ${metrics.widthPixels} height ==> ${metrics.heightPixels}")
-        windowManager.defaultDisplay.getMetrics(metrics)*/
+        //  progress bar GONE
+        progress_bar_signup_screen.visibility = ProgressBar.GONE
 
         title = "Sign-up Screen"
 
@@ -48,6 +40,8 @@ class SignUpScreen : AppCompatActivity() {
 
         //  onClick
         signup_button_signup_activity.setOnClickListener {
+            //  progress bar VISIBLE
+            progress_bar_signup_screen.visibility = ProgressBar.VISIBLE
 
             username = username_signup_activity.text.toString()
             email = email_signup_activity.text.toString()
@@ -58,6 +52,16 @@ class SignUpScreen : AppCompatActivity() {
                 progress_bar_signup_screen.visibility = ProgressBar.VISIBLE
 
                 createUser(email, password) //  creating the user
+            } else {
+                //  progress bar GONE
+                progress_bar_signup_screen.visibility = ProgressBar.GONE
+
+                if (toast != null) {
+                    toast = null
+                }
+                toast = Toast.makeText(this, "Fill out the details", Toast.LENGTH_SHORT)
+                toast!!.show()
+
             }
         }
 
@@ -73,6 +77,7 @@ class SignUpScreen : AppCompatActivity() {
     private fun checkForNewUser(){
         if (firebaseAuth.currentUser != null) {
             intent = Intent(this, ChatActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
         }
     }
@@ -91,6 +96,12 @@ class SignUpScreen : AppCompatActivity() {
 
                 uploadData(firebaseAuth.uid.toString(), username, email, password) //  uploading the data of the user
             }.addOnFailureListener {
+                if (toast != null) {
+                    toast = null
+                }
+                toast = Toast.makeText(this, "User already exists", Toast.LENGTH_SHORT)
+                toast!!.show()
+
                 //  making progress bar invisible
                 progress_bar_signup_screen.visibility = ProgressBar.GONE
 
@@ -123,15 +134,4 @@ class SignUpScreen : AppCompatActivity() {
                 Log.e("SignUpScreen", "uploadData (line 157): $it")
             }
     }
-
-    /*fun <T : View> T.height(function: (Int) -> Unit) {
-        if (height == 0)
-            viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    function(height)
-                }
-            })
-        else function(height)
-    }*/
 }

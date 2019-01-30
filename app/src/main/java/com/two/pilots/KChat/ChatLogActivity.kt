@@ -1,4 +1,4 @@
-package com.two.pilots.messengerappkotlin
+package com.two.pilots.KChat
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,7 +9,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat_log.*
-import com.two.pilots.messengerappkotlin.data_class.*
+import com.two.pilots.KChat.data_class.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.*
@@ -19,19 +19,19 @@ import kotlinx.android.synthetic.main.sender_layout.view.*
 
 class ChatLogActivity : AppCompatActivity() {
 
-    lateinit var firebaseFirestore: FirebaseFirestore
-    lateinit var firebaseAuth: FirebaseAuth
-    lateinit var messagesReference: DatabaseReference
-    lateinit var senderImageURL: String
-    lateinit var receiverImageURL: String
-    lateinit var adapter: GroupAdapter<ViewHolder>
-    lateinit var user: Users
-    lateinit var latestMessagesCollection: CollectionReference
-    lateinit var currentUserId: String
-    lateinit var message: String
-    lateinit var currentUserImageURL: String
-    lateinit var currentUsersUsername: String
-    lateinit var receiverUsername: String
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var messagesReference: DatabaseReference
+    private lateinit var senderImageURL: String
+    private lateinit var receiverImageURL: String
+    private lateinit var adapter: GroupAdapter<ViewHolder>
+    private lateinit var user: Users
+    private lateinit var latestMessagesCollection: CollectionReference
+    private lateinit var currentUserId: String
+    private lateinit var message: String
+    private lateinit var currentUserImageURL: String
+    private lateinit var currentUsersUsername: String
+    private lateinit var receiverUsername: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

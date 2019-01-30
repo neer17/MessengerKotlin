@@ -1,4 +1,4 @@
-package com.two.pilots.messengerappkotlin
+package com.two.pilots.KChat
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import com.two.pilots.messengerappkotlin.data_class.Users
+import com.two.pilots.KChat.data_class.Users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.*
@@ -19,22 +19,22 @@ import kotlinx.android.synthetic.main.chat_layout_inflated.view.*
 
 class ChatActivity : AppCompatActivity() {
 
-    lateinit var firebaseAuth: FirebaseAuth
-    lateinit var firestore: FirebaseFirestore
-    lateinit var currentUserId: String
-    lateinit var latestMessagesreference: DatabaseReference
-    lateinit var adapter: GroupAdapter<ViewHolder>
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var currentUserId: String
+    private lateinit var latestMessagesreference: DatabaseReference
+    private lateinit var adapter: GroupAdapter<ViewHolder>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
+        title = "Chat Activity"
+
         firebaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         currentUserId = firebaseAuth.uid!!
         latestMessagesreference = FirebaseDatabase.getInstance().getReference("latest-messages")
-
-        var currentUser = firebaseAuth.uid
 
         //  setting the adapter
         adapter = GroupAdapter()
@@ -100,6 +100,7 @@ class ChatActivity : AppCompatActivity() {
                     firebaseAuth.signOut()
 
                     intent = Intent(this, SignUpScreen::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                 }
             }

@@ -1,4 +1,4 @@
-package com.two.pilots.messengerappkotlin
+package com.two.pilots.KChat
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

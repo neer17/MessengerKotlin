@@ -1,10 +1,10 @@
-package com.two.pilots.messengerappkotlin
+package com.two.pilots.KChat
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.two.pilots.messengerappkotlin.data_class.Users
+import com.two.pilots.KChat.data_class.Users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.all_users.*
 import kotlinx.android.synthetic.main.recycler_view_inflated_main_activity.view.*
 
 class AllUsers : AppCompatActivity() {
-    lateinit var firebaseFirestore: FirebaseFirestore
-    lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var firebaseAuth: FirebaseAuth
 
     companion object {
         const val KEY = "USER DATA"
@@ -81,7 +81,7 @@ class AllUsers : AppCompatActivity() {
         }
 
         override fun bind(viewHolder: ViewHolder, position: Int) {
-            Log.d("UserItem", "bind (line 84): user ==> ${user}")
+            Log.d("UserItem", "bind (line 84): user ==> $user")
 
             viewHolder.itemView.username_recycler_inflated_main_activity.text = user.username
             viewHolder.itemView.email_recycler_inflated_main_activity.text = user.email
